@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TesteLocalize.Domain\TesteLocalize.Domain.csproj" />
   </ItemGroup>
 
