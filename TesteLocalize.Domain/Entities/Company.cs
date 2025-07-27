@@ -26,7 +26,7 @@ namespace TesteLocalize.Domain.Entities
 
         public Company(Guid userId, string name, string fantasyName, string cnpj, string situation,
             DateTime openingDate, string type, string legalNature, string mainActivity, string street,
-            string number, string complement, string neighborhood, string city, string state, string zipCode)
+            string number, string complement, string neighborhood, string city, string state, string zipCode, Guid id)
         {
             if (string.IsNullOrWhiteSpace(cnpj))
                 throw new ArgumentException("CNPJ is required", nameof(cnpj));
@@ -53,6 +53,7 @@ namespace TesteLocalize.Domain.Entities
             City = city;
             State = state;
             ZipCode = zipCode;
+            Id = id;
         }
     }
 }
