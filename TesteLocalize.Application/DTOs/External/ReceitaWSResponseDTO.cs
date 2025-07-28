@@ -135,13 +135,13 @@ namespace TesteLocalize.Application.DTOs.External
             public bool Optante { get; set; }
 
             [JsonPropertyName("data_opcao")]
-            public DateTime? DataOpcao { get; set; }
+            public string DataOpcao { get; set; }
 
             [JsonPropertyName("data_exclusao")]
-            public DateTime? DataExclusao { get; set; }
+            public string DataExclusao { get; set; }
 
             [JsonPropertyName("ultima_atualizacao")]
-            public DateTime? LastUpdate { get; set; }
+            public string LastUpdate { get; set; }
         }
 
         public class SimeiDto
@@ -150,13 +150,13 @@ namespace TesteLocalize.Application.DTOs.External
             public bool Optante { get; set; }
 
             [JsonPropertyName("data_opcao")]
-            public DateTime? DataOpcao { get; set; }
+            public string DataOpcao { get; set; }
 
             [JsonPropertyName("data_exclusao")]
-            public DateTime? DataExclusao { get; set; }
+            public string DataExclusao { get; set; }
 
             [JsonPropertyName("ultima_atualizacao")]
-            public DateTime? LastUpdate { get; set; }
+            public string LastUpdate { get; set; }
         }
 
         public class BillingDto
