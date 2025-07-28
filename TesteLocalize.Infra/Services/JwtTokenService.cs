@@ -21,7 +21,7 @@ namespace TesteLocalize.Infra.Services
             _secret = configuration["Jwt:Secret"];
             _issuer = configuration["Jwt:Issuer"];
             _audience = configuration["Jwt:Audience"];
-            _expirationMinutes = int.Parse(configuration["Jwt:ExpirationMinutes"]);
+            _expirationMinutes = int.Parse(configuration["Jwt:ExpiryMinutes"]);
         }
 
         public string GenerateToken(User user)
