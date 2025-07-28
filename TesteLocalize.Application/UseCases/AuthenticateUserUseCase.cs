@@ -26,7 +26,7 @@ namespace TesteLocalize.Application.UseCases
 
             if(!_passwordHasher.VerifyPassword(user.PasswordHash, password))
             {
-                throw new Exception("Invlaid email or password.");
+                throw new Exception("Invalid email or password.");
             }
 
             return _jwtTokenService.GenerateToken(user);

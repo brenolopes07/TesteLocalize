@@ -31,10 +31,10 @@ namespace TesteLocalize.Application.UseCases
             var receitaDto = await _receitaWsService.GetCompanyByCnpjAsync(cnpj);
 
             DateTime? openingDate = null;
-            if (DateTime.TryParse(receitaDto.Opening, out var parsedDate))
-            {
-                openingDate = parsedDate;
-            }
+                if (DateTime.TryParse(receitaDto.Opening, out var parsedDate))
+                    {
+                        openingDate = DateTime.SpecifyKind(parsedDate, DateTimeKind.Utc);
+                    }
 
             var mainActivity = receitaDto.MainActivities?.Count > 0 ? receitaDto.MainActivities[0].Text : null;
 
@@ -58,6 +58,8 @@ namespace TesteLocalize.Application.UseCases
                 state: receitaDto.State,
                 zipCode: receitaDto.ZipCode
                 );
+
+            await _companyRepository.AddAsync(company);
 
             return company;
         }
