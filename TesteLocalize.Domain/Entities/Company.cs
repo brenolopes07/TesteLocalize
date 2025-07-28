@@ -22,7 +22,9 @@ namespace TesteLocalize.Domain.Entities
         public string Neighborhood { get; private set; }       
         public string City { get; private set; }              
         public string State { get; private set; }            
-        public string ZipCode { get; private set; }             
+        public string ZipCode { get; private set; }          
+        
+        protected Company () { }    
 
         public Company(Guid userId, string name, string fantasyName, string cnpj, string situation,
             DateTime openingDate, string type, string legalNature, string mainActivity, string street,
