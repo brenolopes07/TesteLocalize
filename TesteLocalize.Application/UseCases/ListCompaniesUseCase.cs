@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TesteLocalize.Application.DTOs;
 using TesteLocalize.Domain.Entities;
 using TesteLocalize.Domain.Repository;
 
@@ -18,13 +19,16 @@ namespace TesteLocalize.Application.UseCases
         }
 
 
-        public async Task<IEnumerable<Company>> ExecuteAsync(Guid userId)
+        public async Task<PagedResult<Company>> ExecuteAsync(Guid userId, int pageNumber, int pageSize)
         {
-            var companies =  await _companyRepository.GetByUserIdAsync(userId);
-            if(companies == null)
-                throw new Exception("No companies found for the given user ID.");
+            if(pageNumber <= 0 || pageSize <= 0)
+                throw new ArgumentException("Page number and page size must be greater than zero.");
 
-            return companies;
+
+            var (items, totalCount) = await _companyRepository.GetByUserIdPagedAsync(userId, pageNumber, pageSize);
+
+            return new PagedResult<Company>(items, totalCount, pageNumber, pageSize);
+
         }
     }
 }
