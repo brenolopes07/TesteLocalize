@@ -13,16 +13,12 @@ namespace TesteLocalize.Infra.Repositories
         public CompanyRepository(TesteLocalizeDbContext context)
         {
             _context = context;
-        }     
-        
-        public async Task AddAsync (Company company)
+        }
+
+        public async Task AddAsync(Company company)
         {
             await _context.Companies.AddAsync(company);
             await _context.SaveChangesAsync();
-        }
-        public async Task<IEnumerable<Company>> GetByUserIdAsync(Guid userId)
-        {
-            return await _context.Companies.Where(c => c.UserId == userId).ToListAsync();
         }
 
         public async Task<bool> ExistsByCnpjAsync(string cnpj, Guid userId)
@@ -30,6 +26,18 @@ namespace TesteLocalize.Infra.Repositories
             return await _context.Companies.AnyAsync(c => c.CNPJ == cnpj && c.UserId == userId);
         }
 
-       
+        public async Task<(IEnumerable<Company> Items, int TotalCount)> GetByUserIdPagedAsync(Guid userId, int pageNumber, int pageSize)
+        {
+            var query = _context.Companies.Where(c => c.UserId == userId);
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(c => c.OpeningDate)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, totalCount);
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace TesteLocalize.Domain.Repository
     {
 
         Task AddAsync(Company Company);
-        Task<IEnumerable<Company>> GetByUserIdAsync(Guid userId);
+        Task <(IEnumerable<Company>Items, int TotalCount)> GetByUserIdPagedAsync(Guid userId, int pageNumber, int pageSize);
         Task<bool> ExistsByCnpjAsync(string cnpj, Guid userId);
 
     }
