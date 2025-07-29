@@ -1,6 +1,17 @@
 version: '3.8'
 
 services:
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: testelocalize-api
+    ports:
+      - "5000:80"        
+    env_file:
+      - TesteLocalize.WebAPI/.env     
+    depends_on:
+      - db
   db:
     image: postgres:16
     container_name: testelocalize-db
