@@ -35,6 +35,20 @@ builder.Services.AddScoped<AuthenticateUserUseCase>();
 builder.Services.AddScoped<RegisterCompanyUseCase>();
 builder.Services.AddScoped<ListCompaniesUseCase>();
 
+var corsPolicyName = "PublicPolicy";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        name: corsPolicyName,
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+    });
+
 
 builder.Services.AddControllers();
 
@@ -93,6 +107,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+app.UseCors(corsPolicyName);
 
 if (app.Environment.IsDevelopment())
 {
