@@ -15,7 +15,7 @@ namespace TesteLocalize.Tests.UseCases
         [Fact]
         public async Task Should_ReturnToken_WhenCredentialsAreValid()
         {
-            // Arrange
+            
             var mockRepo = new Mock<IUserRepository>();
             var mockHasher = new Mock<IPasswordHasher>();
             var mockJwt = new Mock<IJwtTokenService>();
@@ -33,17 +33,17 @@ namespace TesteLocalize.Tests.UseCases
 
             var useCase = new AuthenticateUserUseCase(mockRepo.Object, mockHasher.Object, mockJwt.Object);
 
-            // Act
+            
             var token = await useCase.ExecuteAsync("breno@email.com", "123456");
 
-            // Assert
+            
             token.Should().Be("jwt_token");
         }
 
         [Fact]
         public async Task Should_ThrowException_WhenUserNotFound()
         {
-            // Arrange
+            
             var mockRepo = new Mock<IUserRepository>();
             var mockHasher = new Mock<IPasswordHasher>();
             var mockJwt = new Mock<IJwtTokenService>();
@@ -53,11 +53,11 @@ namespace TesteLocalize.Tests.UseCases
 
             var useCase = new AuthenticateUserUseCase(mockRepo.Object, mockHasher.Object, mockJwt.Object);
 
-            // Act
+           
             Func<Task> act = async () =>
                 await useCase.ExecuteAsync("inexistente@email.com", "123");
 
-            // Assert
+           
             await act.Should().ThrowAsync<Exception>()
                 .WithMessage("Invalid email or password.");
         }
@@ -65,7 +65,7 @@ namespace TesteLocalize.Tests.UseCases
         [Fact]
         public async Task Should_ThrowException_WhenPasswordInvalid()
         {
-            // Arrange
+           
             var mockRepo = new Mock<IUserRepository>();
             var mockHasher = new Mock<IPasswordHasher>();
             var mockJwt = new Mock<IJwtTokenService>();
@@ -80,11 +80,11 @@ namespace TesteLocalize.Tests.UseCases
 
             var useCase = new AuthenticateUserUseCase(mockRepo.Object, mockHasher.Object, mockJwt.Object);
 
-            // Act
+            
             Func<Task> act = async () =>
                 await useCase.ExecuteAsync("breno@email.com", "wrong_password");
 
-            // Assert
+            
             await act.Should().ThrowAsync<Exception>()
                 .WithMessage("Invalid email or password.");
         }
