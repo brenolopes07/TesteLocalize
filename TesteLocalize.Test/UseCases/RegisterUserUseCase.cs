@@ -15,7 +15,7 @@ namespace TesteLocalize.Tests.UseCases
         [Fact]
         public async Task Should_RegisterUser_WhenEmailNotExists()
         {
-            // Arrange
+            
             var mockUserRepo = new Mock<IUserRepository>();
             var mockPasswordHasher = new Mock<IPasswordHasher>();
 
@@ -27,10 +27,10 @@ namespace TesteLocalize.Tests.UseCases
 
             var useCase = new RegisterUserUseCase(mockUserRepo.Object, mockPasswordHasher.Object);
 
-            // Act
+            
             var result = await useCase.ExecuteAsync("Breno", "breno@email.com", "123456");
 
-            // Assert
+            
             result.Should().NotBeNull();
             result.Name.Should().Be("Breno");
             result.Email.Should().Be("breno@email.com");
@@ -46,7 +46,7 @@ namespace TesteLocalize.Tests.UseCases
         [Fact]
         public async Task Should_ThrowException_WhenEmailAlreadyExists()
         {
-            // Arrange
+            
             var existingUser = new User("Breno", "breno@email.com", "existing_hash");
 
             var mockUserRepo = new Mock<IUserRepository>();
@@ -57,11 +57,11 @@ namespace TesteLocalize.Tests.UseCases
 
             var useCase = new RegisterUserUseCase(mockUserRepo.Object, mockPasswordHasher.Object);
 
-            // Act
+            
             Func<Task> act = async () =>
                 await useCase.ExecuteAsync("Novo Nome", "breno@email.com", "nova_senha");
 
-            // Assert
+           
             await act.Should()
                      .ThrowAsync<InvalidOperationException>()
                      .WithMessage("User with this email already exists.");
