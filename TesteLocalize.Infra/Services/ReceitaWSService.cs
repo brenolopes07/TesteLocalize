@@ -35,7 +35,7 @@ namespace TesteLocalize.Infra.Services
             var dto = await response.Content.ReadFromJsonAsync<ReceitaWSResponseDTO>();
 
             if (dto == null || dto.Status != "OK")
-                throw new Exception($"Invalid response from ReceitaWS: {dto?.Status}");
+                throw new Exception($"Invalid Cnpj! {dto?.Status}");
 
             return dto;
         }
