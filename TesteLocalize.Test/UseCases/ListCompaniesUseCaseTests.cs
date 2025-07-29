@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
+using TesteLocalize.Application.DTOs;
 using TesteLocalize.Application.UseCases;
 using TesteLocalize.Domain.Entities;
 using TesteLocalize.Domain.Repository;
@@ -13,11 +14,13 @@ namespace TesteLocalize.Tests.UseCases
     public class ListCompaniesUseCaseTests
     {
         [Fact]
-        public async Task Should_ReturnCompanies_WhenCompaniesExist()
+        public async Task Should_ReturnPagedCompanies_WhenCompaniesExist()
         {
             // Arrange
             var mockRepo = new Mock<ICompanyRepository>();
             var userId = Guid.NewGuid();
+            int pageNumber = 1;
+            int pageSize = 2;
 
             var companies = new List<Company>
             {
@@ -61,38 +64,63 @@ namespace TesteLocalize.Tests.UseCases
                 )
             };
 
-            mockRepo.Setup(r => r.GetByUserIdAsync(userId))
-                    .ReturnsAsync(companies);
+            int totalCount = 5; // Exemplo total de registros no BD para aquele user
+
+            mockRepo.Setup(r => r.GetByUserIdPagedAsync(userId, pageNumber, pageSize))
+                    .ReturnsAsync((companies, totalCount));
 
             var useCase = new ListCompaniesUseCase(mockRepo.Object);
 
             // Act
-            var result = await useCase.ExecuteAsync(userId);
+            var result = await useCase.ExecuteAsync(userId, pageNumber, pageSize);
 
             // Assert
             result.Should().NotBeNull();
-            result.Should().HaveCount(2);
-            result.Should().BeEquivalentTo(companies);
+            result.Items.Should().HaveCount(2);
+            result.TotalCount.Should().Be(totalCount);
+            result.PageNumber.Should().Be(pageNumber);
+            result.PageSize.Should().Be(pageSize);
+            result.Items.Should().BeEquivalentTo(companies);
         }
 
         [Fact]
-        public async Task Should_ThrowException_WhenNoCompaniesFound()
+        public async Task Should_ThrowException_WhenPageNumberOrPageSizeIsInvalid()
+        {
+            // Arrange
+            var mockRepo = new Mock<ICompanyRepository>();
+            var useCase = new ListCompaniesUseCase(mockRepo.Object);
+            var userId = Guid.NewGuid();
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => useCase.ExecuteAsync(userId, 0, 10));
+            await Assert.ThrowsAsync<ArgumentException>(() => useCase.ExecuteAsync(userId, 1, 0));
+            await Assert.ThrowsAsync<ArgumentException>(() => useCase.ExecuteAsync(userId, -1, 5));
+            await Assert.ThrowsAsync<ArgumentException>(() => useCase.ExecuteAsync(userId, 1, -5));
+        }
+
+        [Fact]
+        public async Task Should_ReturnEmptyPagedResult_WhenNoCompaniesFound()
         {
             // Arrange
             var mockRepo = new Mock<ICompanyRepository>();
             var userId = Guid.NewGuid();
+            int pageNumber = 1;
+            int pageSize = 10;
 
-            mockRepo.Setup(r => r.GetByUserIdAsync(userId))
-                    .ReturnsAsync((IEnumerable<Company>)null);
+            mockRepo.Setup(r => r.GetByUserIdPagedAsync(userId, pageNumber, pageSize))
+                    .ReturnsAsync((new List<Company>(), 0));
 
             var useCase = new ListCompaniesUseCase(mockRepo.Object);
 
             // Act
-            Func<Task> act = async () => await useCase.ExecuteAsync(userId);
+            var result = await useCase.ExecuteAsync(userId, pageNumber, pageSize);
 
             // Assert
-            await act.Should().ThrowAsync<Exception>()
-                .WithMessage("No companies found for the given user ID.");
+            result.Should().NotBeNull();
+            result.Items.Should().BeEmpty();
+            result.TotalCount.Should().Be(0);
+            result.PageNumber.Should().Be(pageNumber);
+            result.PageSize.Should().Be(pageSize);
         }
     }
 }
