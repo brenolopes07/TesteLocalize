@@ -18,7 +18,7 @@ namespace TesteLocalize.Tests.UseCases
         [Fact]
         public async Task Should_ThrowException_WhenCompanyAlreadyExists()
         {
-            // Arrange
+            
             var mockRepo = new Mock<ICompanyRepository>();
             var mockReceita = new Mock<IReceitaWSService>();
             var userId = Guid.NewGuid();
@@ -29,10 +29,10 @@ namespace TesteLocalize.Tests.UseCases
 
             var useCase = new RegisterCompanyUseCase(mockRepo.Object, mockReceita.Object);
 
-            // Act
+            
             var act = async () => await useCase.ExecuteAsync(userId, cnpj);
 
-            // Assert
+            
             await act.Should().ThrowAsync<InvalidOperationException>()
                 .WithMessage("Company with this CNPJ already exists for the user.");
         }
@@ -40,7 +40,7 @@ namespace TesteLocalize.Tests.UseCases
         [Fact]
         public async Task Should_RegisterCompany_WhenCompanyDoesNotExist()
         {
-            // Arrange
+            
             var mockRepo = new Mock<ICompanyRepository>();
             var mockReceita = new Mock<IReceitaWSService>();
             var userId = Guid.NewGuid();
@@ -75,10 +75,10 @@ namespace TesteLocalize.Tests.UseCases
 
             var useCase = new RegisterCompanyUseCase(mockRepo.Object, mockReceita.Object);
 
-            // Act
+           
             var result = await useCase.ExecuteAsync(userId, cnpj);
 
-            // Assert
+            
             result.Should().NotBeNull();
             result.CNPJ.Should().Be(cnpj);
             result.Name.Should().Be("Empresa Teste");
