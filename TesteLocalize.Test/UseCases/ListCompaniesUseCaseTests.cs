@@ -16,7 +16,7 @@ namespace TesteLocalize.Tests.UseCases
         [Fact]
         public async Task Should_ReturnPagedCompanies_WhenCompaniesExist()
         {
-            // Arrange
+            
             var mockRepo = new Mock<ICompanyRepository>();
             var userId = Guid.NewGuid();
             int pageNumber = 1;
@@ -71,10 +71,10 @@ namespace TesteLocalize.Tests.UseCases
 
             var useCase = new ListCompaniesUseCase(mockRepo.Object);
 
-            // Act
+            
             var result = await useCase.ExecuteAsync(userId, pageNumber, pageSize);
 
-            // Assert
+            
             result.Should().NotBeNull();
             result.Items.Should().HaveCount(2);
             result.TotalCount.Should().Be(totalCount);
@@ -86,12 +86,12 @@ namespace TesteLocalize.Tests.UseCases
         [Fact]
         public async Task Should_ThrowException_WhenPageNumberOrPageSizeIsInvalid()
         {
-            // Arrange
+            
             var mockRepo = new Mock<ICompanyRepository>();
             var useCase = new ListCompaniesUseCase(mockRepo.Object);
             var userId = Guid.NewGuid();
 
-            // Act & Assert
+            
             await Assert.ThrowsAsync<ArgumentException>(() => useCase.ExecuteAsync(userId, 0, 10));
             await Assert.ThrowsAsync<ArgumentException>(() => useCase.ExecuteAsync(userId, 1, 0));
             await Assert.ThrowsAsync<ArgumentException>(() => useCase.ExecuteAsync(userId, -1, 5));
@@ -101,7 +101,7 @@ namespace TesteLocalize.Tests.UseCases
         [Fact]
         public async Task Should_ReturnEmptyPagedResult_WhenNoCompaniesFound()
         {
-            // Arrange
+            
             var mockRepo = new Mock<ICompanyRepository>();
             var userId = Guid.NewGuid();
             int pageNumber = 1;
@@ -112,10 +112,10 @@ namespace TesteLocalize.Tests.UseCases
 
             var useCase = new ListCompaniesUseCase(mockRepo.Object);
 
-            // Act
+            
             var result = await useCase.ExecuteAsync(userId, pageNumber, pageSize);
 
-            // Assert
+            
             result.Should().NotBeNull();
             result.Items.Should().BeEmpty();
             result.TotalCount.Should().Be(0);
